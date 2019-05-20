@@ -1,26 +1,87 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {
+  Hr,
+  H2,
+} from '@bootstrap-styled/v4';
+
+import Header from './components/Header';
+import Carousel from './components/Carousel';
+
+export default class App extends React.Component {
+
+  state = {
+    data: null,
+    previouslyWatched: [],
+  };
+
+  componentDidMount() {
+    this.fetchData()
+  }
+
+  handleRefreshClick = () => {
+    this.fetchData()
+  }
+
+  fetchData = () => {
+    fetch('https://demo2697834.mockable.io/movies')
+      .then(res => res.json())
+      .then(body => this.saveData(body))
+  };
+
+  saveData = (data) => {
+    this.setState({
+      data: data,
+    });
+  };
+
+  handleUpdatePreviouslyWatched = (movieId, movie) => {
+    console.log('updating previously watched');
+    const previouslyWatchedMovieList = this.state.previouslyWatched;
+
+    // Previous watched is empty
+    if (previouslyWatchedMovieList.length === 0) {
+      console.log('added a movie to an empty list')
+      previouslyWatchedMovieList.push(movie);
+      return this.setState({
+        previouslyWatched: previouslyWatchedMovieList
+      })
+    }
+
+    previouslyWatchedMovieList.map((previouslyWatchedMovie, index) => {
+      if (movieId === previouslyWatchedMovie.id) {
+        previouslyWatchedMovieList.splice(index, index+1)
+        console.log(previouslyWatchedMovieList)
+        previouslyWatchedMovieList.unshift(movie)
+        console.log(previouslyWatchedMovieList)
+        return this.setState({
+          previouslyWatched: previouslyWatchedMovieList
+        })
+      } else {
+        console.log('adding a new watched movie at beginign of list', movie)
+        console.log(previouslyWatchedMovieList)
+        previouslyWatchedMovieList.unshift(movie)
+        console.log(previouslyWatchedMovieList)
+        return this.setState({
+          previouslyWatched: previouslyWatchedMovieList
+        })
+      }
+
+
+    })
+  };
+
+  render() {
+    const { data, previouslyWatched } = this.state;
+    return (
+      <div className="App">
+        <Header onRefreshClick={this.handleRefreshClick} />
+        <H2>Featured Movies</H2>
+        <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+        <Hr className="my-5" />
+        <H2>Previously Watched Movies</H2>
+        <Carousel movies={previouslyWatched} />
+      </div>
+    );
+  }
 }
-
-export default App;
