@@ -41,15 +41,14 @@ export default class App extends React.Component {
 
     // Previous watched is empty
     if (previouslyWatchedMovieList.length === 0) {
-      console.log('added a movie to an empty list')
-      previouslyWatchedMovieList.push(movie);
-      return this.setState({
-        previouslyWatched: previouslyWatchedMovieList
+      this.setState({
+        previouslyWatched: [ ...this.state.previouslyWatched, movie]
       })
     }
 
     previouslyWatchedMovieList.map((previouslyWatchedMovie, index) => {
       if (movieId === previouslyWatchedMovie.id) {
+        console.log(previouslyWatchedMovieList, index, index+1)
         previouslyWatchedMovieList.splice(index, index+1)
         console.log(previouslyWatchedMovieList)
         previouslyWatchedMovieList.unshift(movie)
