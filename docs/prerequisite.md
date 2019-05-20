@@ -1,0 +1,4 @@
+- [NodeJS](https://nodejs.org/) >= v11.9.0
+- [npm](https://docs.npmjs.com/cli/npm) >= 6.5.0
+- [git client](https://git-scm.com/) >= 2.1.4
+- Gitlab module access to group **dev-tools** or project ****.

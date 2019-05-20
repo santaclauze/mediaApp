@@ -1,0 +1,30 @@
+{
+  "ignore": [
+    "**/__tests__/**",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/*.d.ts"
+  ],
+  "sections": [
+    {
+      "name": "Introduction",
+      "content": "docs/introduction.md"
+    },
+    {
+      "name": "UI Components",
+      "content": "docs/ui.md"
+    },
+    {
+      "name": "FAQ",
+      "content": "docs/faq.md"
+    },
+    {
+      "name": "Changelog",
+      "content": "CHANGELOG.md"
+    }
+  ],
+  "ribbon": {
+    "url": "https://module.kopaxgroup.com/dev-tools/rollup-umd",
+    "text": "Fork us on GitLab"
+  }
+}
