@@ -19,6 +19,14 @@ export default class App extends React.Component {
     this.fetchData()
   }
 
+  componentDidUpdate() {
+    // console.log('componentDidUpdate images')
+    // if(localStorage.getItem('images') === null) {
+    //   console.log('no images')
+    //   this.saveImagesToCache(this.state.data.entries);
+    // }
+  }
+
   handleRefreshClick = () => {
     this.fetchData()
   }
@@ -35,44 +43,71 @@ export default class App extends React.Component {
     });
   };
 
-  handleUpdatePreviouslyWatched = (movieId, movie) => {
-    console.log('updating previously watched');
+  // saveImagesToCache = (movieList) => {
+  //   console.log(movieList)
+  //
+  //   movieList.map(movie => this.getBase64ImageFromUrl(movie.images[0].url))
+  // }
+  //
+  // getBase64ImageFromUrl = async imageUrl => {
+  //   const res = await fetch(imageUrl);
+  //   const blob = await res.blob();
+  //   console.log(res, blob)
+  //
+  //   return new Promise((resolve, reject) => {
+  //     const reader  = new FileReader();
+  //     reader.addEventListener("load", function () {
+  //       resolve(reader.result);
+  //     }, false);
+  //
+  //     reader.onerror = () => {
+  //       return reject(this);
+  //     };
+  //     reader.readAsDataURL(blob);
+  //   })
+  // }
+
+  handleUpdatePreviouslyWatched = (movie) => {
     const previouslyWatchedMovieList = this.state.previouslyWatched;
-
-    // Previous watched is empty
-    if (previouslyWatchedMovieList.length === 0) {
-      console.log('added a movie to an empty list')
-      previouslyWatchedMovieList.push(movie);
-      return this.setState({
-        previouslyWatched: previouslyWatchedMovieList
-      })
+    switch(previouslyWatchedMovieList.length) {
+      case 0:
+        previouslyWatchedMovieList.push(movie);
+        this.setState({
+          previouslyWatched: previouslyWatchedMovieList
+        });
+        break;
+      case 1:
+        if(movie.id !== previouslyWatchedMovieList[0].id) {
+          previouslyWatchedMovieList.unshift(movie);
+          this.setState({
+            previouslyWatched: previouslyWatchedMovieList
+          });
+        };
+        break;
+      default:
+        const movieNeverWatched = previouslyWatchedMovieList.find(previouslyWatchedMovie => movie.id === previouslyWatchedMovie.id)
+        if(movieNeverWatched === undefined) {
+          previouslyWatchedMovieList.unshift(movie);
+          return this.setState({
+            previouslyWatched: previouslyWatchedMovieList
+          })
+        } else {
+          previouslyWatchedMovieList.map((previouslyWatchedMovie, index) => {
+            if (movie.id === previouslyWatchedMovie.id) {
+              previouslyWatchedMovieList.splice(index, index+1);
+              previouslyWatchedMovieList.unshift(movie);
+              return this.setState({
+                previouslyWatched: previouslyWatchedMovieList
+              })
+            }
+          })
+        }
     }
-
-    previouslyWatchedMovieList.map((previouslyWatchedMovie, index) => {
-      if (movieId === previouslyWatchedMovie.id) {
-        previouslyWatchedMovieList.splice(index, index+1)
-        console.log(previouslyWatchedMovieList)
-        previouslyWatchedMovieList.unshift(movie)
-        console.log(previouslyWatchedMovieList)
-        return this.setState({
-          previouslyWatched: previouslyWatchedMovieList
-        })
-      } else {
-        console.log('adding a new watched movie at beginign of list', movie)
-        console.log(previouslyWatchedMovieList)
-        previouslyWatchedMovieList.unshift(movie)
-        console.log(previouslyWatchedMovieList)
-        return this.setState({
-          previouslyWatched: previouslyWatchedMovieList
-        })
-      }
-
-
-    })
   };
 
   render() {
     const { data, previouslyWatched } = this.state;
+
     return (
       <div className="App">
         <Header onRefreshClick={this.handleRefreshClick} />
@@ -80,7 +115,7 @@ export default class App extends React.Component {
         <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
         <Hr className="my-5" />
         <H2>Previously Watched Movies</H2>
-        <Carousel movies={previouslyWatched} />
+        <Carousel movies={previouslyWatched} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
       </div>
     );
   }

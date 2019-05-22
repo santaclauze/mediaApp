@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   Img,
+  P
 } from '@bootstrap-styled/v4';
 
 import MoviePlayer from './MoviePlayer';
@@ -24,7 +25,8 @@ const MovieImg = styled(Img)`
 export default class Movie extends React.Component {
 
   static propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    updatePreviouslyWatchedList: PropTypes.func,
   };
 
   state = {
@@ -37,7 +39,7 @@ export default class Movie extends React.Component {
     this.setState({
       movieOpen: false
     });
-    updatePreviouslyWatchedList && updatePreviouslyWatchedList(data.id, data )
+    updatePreviouslyWatchedList && updatePreviouslyWatchedList(data)
   };
 
   handleOpenVideo = () => {
@@ -52,6 +54,7 @@ export default class Movie extends React.Component {
     return (
       <Fragment>
         <MovieImg src={data.images[0].url} className="cursor-pointer" onClick={this.handleOpenVideo} />
+        <P className="text-white">{data.title}</P>
         {this.state.movieOpen ? ReactDOM.createPortal(
           <MoviePlayer close={this.handleCloseVideo} movieContent={data.contents[0]} />,
           document.body

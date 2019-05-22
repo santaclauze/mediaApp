@@ -24,7 +24,13 @@ export default class Carousel extends React.Component {
 
     return (
       <Slider {...settings}>
-        {movies && movies.map((movie, index) => <Movie updatePreviouslyWatchedList={this.props.updatePreviouslyWatchedList} data={movie} key={index} />)}
+        {movies && movies.map((movie, index) =>
+          <Movie
+            updatePreviouslyWatchedList={this.props.updatePreviouslyWatchedList}
+            data={movie}
+            key={index}
+          />
+        )}
       </Slider>
     );
   }
