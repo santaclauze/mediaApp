@@ -1,10 +1,8 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import styled, { withTheme } from 'styled-components';
 import {
   Close,
-  Modal
 } from '@bootstrap-styled/v4';
 import { FadeIn } from '@bootstrap-styled/motion';
 
@@ -12,10 +10,12 @@ import { FadeIn } from '@bootstrap-styled/motion';
 const Wrapper = styled.div`
   position: absolute;
   top: 0;
-  height: 100%;
   width: 100%;
-   background-color:rgba(0,0,0,0.6);
+  height: 100vh;
+  background-color:rgba(0,0,0,0.6);
   display: flex;
+  overflow: hidden;
+  z-index: 9999;
 `
 
 const PlayerWrapper = styled.div`
@@ -37,13 +37,6 @@ class MoviePlayer extends React.Component {
     theme: PropTypes.object,
     movieContent: PropTypes.object,
   };
-
-  state = {
-  }
-
-  handleClick = () => {
-
-  }
 
   render() {
     const { theme, close, movieContent } = this.props;

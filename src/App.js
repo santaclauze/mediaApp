@@ -7,16 +7,20 @@ import {
 
 import Header from './components/Header';
 import Carousel from './components/Carousel';
+import Loader from './components/Loader';
 
 export default class App extends React.Component {
 
   state = {
     data: null,
     previouslyWatched: [],
+    isLoading: false,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchData()
+  }
+  componentDidMount() {
   }
 
   componentDidUpdate() {
@@ -32,40 +36,22 @@ export default class App extends React.Component {
   }
 
   fetchData = () => {
+    this.setState({
+      isLoading: true,
+    });
     fetch('https://demo2697834.mockable.io/movies')
       .then(res => res.json())
       .then(body => this.saveData(body))
+      .catch(error => console.error(error));
   };
 
   saveData = (data) => {
     this.setState({
       data: data,
+      isLoading: false,
     });
+    console.log(data)
   };
-
-  // saveImagesToCache = (movieList) => {
-  //   console.log(movieList)
-  //
-  //   movieList.map(movie => this.getBase64ImageFromUrl(movie.images[0].url))
-  // }
-  //
-  // getBase64ImageFromUrl = async imageUrl => {
-  //   const res = await fetch(imageUrl);
-  //   const blob = await res.blob();
-  //   console.log(res, blob)
-  //
-  //   return new Promise((resolve, reject) => {
-  //     const reader  = new FileReader();
-  //     reader.addEventListener("load", function () {
-  //       resolve(reader.result);
-  //     }, false);
-  //
-  //     reader.onerror = () => {
-  //       return reject(this);
-  //     };
-  //     reader.readAsDataURL(blob);
-  //   })
-  // }
 
   handleUpdatePreviouslyWatched = (movie) => {
     const previouslyWatchedMovieList = this.state.previouslyWatched;
@@ -106,13 +92,21 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { data, previouslyWatched } = this.state;
+    const { data, previouslyWatched, isLoading } = this.state;
 
     return (
       <div className="App">
         <Header onRefreshClick={this.handleRefreshClick} />
-        <H2>Featured Movies</H2>
-        <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+        {isLoading ?
+          <div className="d-flex align-items-center justify-content-around">
+            <Loader />
+          </div>
+          :
+          <React.Fragment>
+             <H2>Featured Movies</H2>
+             <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+          </React.Fragment>
+        }
         <Hr className="my-5" />
         <H2>Previously Watched Movies</H2>
         <Carousel movies={previouslyWatched} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />

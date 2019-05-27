@@ -7,7 +7,11 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
+    "test": "npm run lint && npm run test:web",
+    "test:web": "NODE_ENV=test jest --coverage",
+    "test:clean": "rimraf ./coverage",
+    "test:watch": "npm run test -- --watch",
+    "lint": "eslint src",
     "jsdoc-documentation": "jsdoc-documentation",
     "jsdoc": "jsdoc-documentation --file",
     "prestyleguide": "npm run jsdoc",
@@ -76,6 +80,7 @@
   },
   "devDependencies": {
     "@bootstrap-styled/v4": "^3.0.13",
+    "babel-eslint": "^10.0.1",
     "@bootstrap-styled/provider": "^1.4.2",
     "@bootstrap-styled/motion": "^2.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
@@ -85,8 +90,15 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "babel-plugin-styled-components": "^1.10.0",
     "bootstrap-styled": "^2.4.13",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
     "@rollup-umd/documentation": "^2.0.4",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.2"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -111,7 +123,9 @@
     "setupFiles": [
       "react-app-polyfill/jsdom"
     ],
-    "setupFilesAfterEnv": [],
+    "setupFilesAfterEnv": [
+      "<rootDir>/internals/testing/test-bundler.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
