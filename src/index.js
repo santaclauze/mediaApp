@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.scss";
 
 // font-awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faRedo } from '@fortawesome/free-solid-svg-icons'
+import { faRedo, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -16,6 +16,7 @@ import theme from './theme';
 
 // font-awesome lib
 library.add(faRedo)
+library.add(faSpinner)
 
 ReactDOM.render(<BootstrapProvider injectGlobal reset theme={theme}><App /></BootstrapProvider>, document.getElementById('root'));
 
