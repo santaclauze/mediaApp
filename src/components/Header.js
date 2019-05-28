@@ -18,27 +18,22 @@ export default class Header extends React.Component {
   };
 
   state = {
-    mouseOver: false,
+    isOpen: false,
   }
 
   handleClick = () => {
     this.props.onRefreshClick()
   }
 
-  handleMouseOver = () => {
+  handleToggle = () => {
     this.setState({
-      mouseOver: true
+      isOpen: !this.state.isOpen,
     })
   }
 
-  handleMouseOut = () => {
-    this.setState({
-      mouseOver: false
-    })
-  }
 
   render() {
-    const { mouseOver } = this.state;
+    const { isOpen } = this.state;
     const { isLoading } = this.props;
 
     return (
@@ -46,8 +41,6 @@ export default class Header extends React.Component {
         <H1>Home</H1>
         <Button
             color="success"
-            onMouseOver={this.handleMouseOver}
-            onMouseOut={this.handleMouseOut}
             onClick={this.handleClick}
             id="tooltip-button"
         >
@@ -55,8 +48,9 @@ export default class Header extends React.Component {
         </Button>
         <Tooltip
           placement="left"
-          isOpen={mouseOver}
+          isOpen={isOpen}
           target="tooltip-button"
+          toggle={this.handleToggle}
         >
           Refresh movie list.
         </Tooltip>

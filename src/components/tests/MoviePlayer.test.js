@@ -10,7 +10,6 @@ describe('<MoviePlayer />', () => {
             url: 'test_url'
         }
         const renderedComponent = shallow(<MoviePlayer movieContent={movieContent} />);
-        console.log(renderedComponent.debug())
         expect(renderedComponent.find('ContextConsumer').length).toBe(1);
     });
 });
