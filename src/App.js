@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Carousel from './components/Carousel';
 import Loader from './components/Loader';
 import Container from './components/Container';
+import Movie from './components/Movie';
 
 export default class App extends React.Component {
 
@@ -118,12 +119,19 @@ export default class App extends React.Component {
             </div>
             :
           <Container>
-            <H2>Featured Movies</H2>
-            <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched}/>
-
-            < Hr className="my-5" />
-            <H2>Previously Watched Movies</H2>
-            <Carousel movies={this.getPreviouslyWatchedMovies(data && data.entries)} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+            <div className="d-none d-sm-block">
+              <H2>Featured Movies</H2>
+              <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched}/>
+              <Hr className="my-5" />
+              <H2>Previously Watched Movies</H2>
+              <Carousel movies={this.getPreviouslyWatchedMovies(data && data.entries)} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+            </div>
+            <div className="d-sm-none">
+              <H2>Featured Movies</H2>
+              <div className="d-flex flex-wrap justify-content-around">
+                {data.entries.map(movie => <Movie data={movie} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />)}
+              </div>
+            </div>
           </Container>
         }
         </div>

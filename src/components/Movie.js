@@ -10,6 +10,7 @@ import {
   Small,
   Hr
 } from '@bootstrap-styled/v4';
+import { mediaBreakpointDown } from '@bootstrap-styled/css-mixins/lib/breakpoints';
 
 import MoviePlayer from './MoviePlayer';
 
@@ -122,7 +123,7 @@ class MovieUnstyled extends React.Component {
               src={movieUrl}
               onLoad={this.handleLoad(MovieImg)}
               alt={movieUrl}
-              className="cursor-pointer"
+              className="cursor-pointer movie-image"
           />
           {movieHover && (
             <div className="movie-description text-white">
@@ -153,16 +154,22 @@ class MovieUnstyled extends React.Component {
 }
 
 const Movie = styled(MovieUnstyled)`
-  &.movie-wrapper {
-    position: relative;
-
-    .movie-description {
-      position: absolute;
-      top: 0;
-      left: 0;
+  ${props => `
+    &.movie-wrapper {
+      position: relative;
+  
+      .movie-description {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
-  }
-
+    ${mediaBreakpointDown('sm', props.theme['$grid-breakpoints'], `
+      &.movie-wrapper, .movie-image, .movie-description {
+        max-width: 175px;
+      }
+    `)}
+  `}
 `;
 
 export default Movie;
