@@ -97,19 +97,20 @@ export default class App extends React.Component {
       <div className="App">
         <Header onRefreshClick={this.handleRefreshClick} isLoading={isLoading} />
         {isLoading ?
-          <div className="d-flex align-items-center justify-content-around">
-            <Loader />
-          </div>
-          :
-          <React.Fragment>
-             <H2>Featured Movies</H2>
-             <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+            <div className="d-flex align-items-center justify-content-around">
+              <Loader/>
+            </div>
+            :
+            <React.Fragment>
+              <H2>Featured Movies</H2>
+              <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched}/>
+
+            < Hr className="my-5" />
+            <H2>Previously Watched Movies</H2>
+            <Carousel movies={previouslyWatched} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
           </React.Fragment>
         }
-        <Hr className="my-5" />
-        <H2>Previously Watched Movies</H2>
-        <Carousel movies={previouslyWatched} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
-      </div>
+        </div>
     );
   }
 }
