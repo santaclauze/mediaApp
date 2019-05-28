@@ -131,9 +131,10 @@ class MovieUnstyled extends React.Component {
               <Hr />
               <Small>Rating: {data.parentalRatings[0].rating}</Small>
               <Hr />
-              {data.categories.map(category =>
+              {data.categories.map((category, index) =>
                 <Badge
                   className="ml-1"
+                  key={index}
                 >
                   {category.title}
                 </Badge>

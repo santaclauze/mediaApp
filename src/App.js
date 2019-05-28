@@ -13,22 +13,13 @@ export default class App extends React.Component {
 
   state = {
     data: null,
-    previouslyWatched: [],
+    previouslyWatchedMovieIds: [],
     isLoading: false,
   };
 
   componentWillMount() {
     this.fetchData()
-  }
-  componentDidMount() {
-  }
-
-  componentDidUpdate() {
-    // console.log('componentDidUpdate images')
-    // if(localStorage.getItem('images') === null) {
-    //   console.log('no images')
-    //   this.saveImagesToCache(this.state.data.entries);
-    // }
+    this.updateFromLocalStorage()
   }
 
   handleRefreshClick = () => {
@@ -50,41 +41,65 @@ export default class App extends React.Component {
       data: data,
       isLoading: false,
     });
-    console.log(data)
+  };
+
+  updateFromLocalStorage = () => {
+    const locallyStoredPreviouslyWatchedMovies = localStorage.getItem('previouslyWatched');
+    if (locallyStoredPreviouslyWatchedMovies !== null && locallyStoredPreviouslyWatchedMovies.split(',').length > 0) {
+      console.log(locallyStoredPreviouslyWatchedMovies.split(','));
+      this.setState({
+        previouslyWatchedMovieIds: locallyStoredPreviouslyWatchedMovies.split(',')
+      })
+    }
+  }
+
+  getPreviouslyWatchedMovies = (movies) => {
+    const { previouslyWatchedMovieIds } = this.state;
+    const previouslyWatchedMovies = [];
+    previouslyWatchedMovieIds.map(watchedMovieId =>
+      movies.map(movie => { if(watchedMovieId === movie.id) {
+        previouslyWatchedMovies.push(movie)
+      }})
+    )
+    return previouslyWatchedMovies;
   };
 
   handleUpdatePreviouslyWatched = (movie) => {
-    const previouslyWatchedMovieList = this.state.previouslyWatched;
-    switch(previouslyWatchedMovieList.length) {
+    const previouslyWatchedMovieIds = this.state.previouslyWatchedMovieIds;
+    switch(previouslyWatchedMovieIds.length) {
       case 0:
-        previouslyWatchedMovieList.push(movie);
+        previouslyWatchedMovieIds.push(movie.id);
         this.setState({
-          previouslyWatched: previouslyWatchedMovieList
+          previouslyWatchedMovieIds: previouslyWatchedMovieIds
         });
+        localStorage.setItem('previouslyWatched', previouslyWatchedMovieIds);
         break;
       case 1:
-        if(movie.id !== previouslyWatchedMovieList[0].id) {
-          previouslyWatchedMovieList.unshift(movie);
+        if(movie.id !== previouslyWatchedMovieIds[0]) {
+          previouslyWatchedMovieIds.unshift(movie.id);
           this.setState({
-            previouslyWatched: previouslyWatchedMovieList
+            previouslyWatchedMovieIds: previouslyWatchedMovieIds
           });
-        };
+          localStorage.setItem('previouslyWatched', previouslyWatchedMovieIds);
+        }
         break;
       default:
-        const movieNeverWatched = previouslyWatchedMovieList.find(previouslyWatchedMovie => movie.id === previouslyWatchedMovie.id)
+        const movieNeverWatched = previouslyWatchedMovieIds.find(previouslyWatchedMovie => movie.id === previouslyWatchedMovie)
         if(movieNeverWatched === undefined) {
-          previouslyWatchedMovieList.unshift(movie);
-          return this.setState({
-            previouslyWatched: previouslyWatchedMovieList
-          })
+          previouslyWatchedMovieIds.unshift(movie.id);
+          this.setState({
+            previouslyWatchedMovieIds: previouslyWatchedMovieIds
+          });
+          localStorage.setItem('previouslyWatched', previouslyWatchedMovieIds)
         } else {
-          previouslyWatchedMovieList.map((previouslyWatchedMovie, index) => {
-            if (movie.id === previouslyWatchedMovie.id) {
-              previouslyWatchedMovieList.splice(index, index+1);
-              previouslyWatchedMovieList.unshift(movie);
-              return this.setState({
-                previouslyWatched: previouslyWatchedMovieList
-              })
+          previouslyWatchedMovieIds.map((previouslyWatchedMovie, index) => {
+            if (movie.id === previouslyWatchedMovie) {
+              previouslyWatchedMovieIds.splice(index, index+1);
+              previouslyWatchedMovieIds.unshift(movie.id);
+              this.setState({
+                previouslyWatchedMovieIds: previouslyWatchedMovieIds
+              });
+              localStorage.setItem('previouslyWatched', previouslyWatchedMovieIds)
             }
           })
         }
@@ -92,7 +107,7 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { data, previouslyWatched, isLoading } = this.state;
+    const { data, isLoading } = this.state;
     return (
       <div className="App">
         <Header onRefreshClick={this.handleRefreshClick} isLoading={isLoading} />
@@ -107,7 +122,7 @@ export default class App extends React.Component {
 
             < Hr className="my-5" />
             <H2>Previously Watched Movies</H2>
-            <Carousel movies={previouslyWatched} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
+            <Carousel movies={this.getPreviouslyWatchedMovies(data && data.entries)} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
           </React.Fragment>
         }
         </div>
