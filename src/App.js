@@ -93,10 +93,9 @@ export default class App extends React.Component {
 
   render() {
     const { data, previouslyWatched, isLoading } = this.state;
-
     return (
       <div className="App">
-        <Header onRefreshClick={this.handleRefreshClick} />
+        <Header onRefreshClick={this.handleRefreshClick} isLoading={isLoading} />
         {isLoading ?
           <div className="d-flex align-items-center justify-content-around">
             <Loader />
