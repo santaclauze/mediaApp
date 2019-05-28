@@ -9,17 +9,16 @@ const Container = styled.div`
         padding-left: 10px;
         padding-right: 10px;
         ${mediaBreakpointUp('sm', props.theme['$grid-breakpoints'],`
-            width: 740px;
+            width: 540px;
         `)}
         ${mediaBreakpointUp('md', props.theme['$grid-breakpoints'],`
-            width: 960px;
+            width: 760px;
         `)}
         ${mediaBreakpointUp('lg', props.theme['$grid-breakpoints'],`
-
-            width: 1160px;
+            width: 960px;
         `)}
         ${mediaBreakpointUp('xl', props.theme['$grid-breakpoints'],`
-            width: 1580px;
+            width: 1150px;
         `)}
     `}
 `;

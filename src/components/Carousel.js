@@ -2,27 +2,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from "react-slick";
 import Movie from './Movie';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 class CarouselUnstyled extends React.Component {
 
   static propTypes = {
     movies: PropTypes.array,
     updatePreviouslyWatchedList: PropTypes.func,
+      theme: PropTypes.object,
   };
 
-
   render() {
-    const { movies } = this.props;
+    const { movies, theme } = this.props;
 
     const settings = {
       infinite: false,
       dots: true,
       speed: 500,
       draggable: false,
-      slidesToShow: 5,
-      slidesToScroll: 1
+      slidesToShow: 4,
+      slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: parseInt(theme['$grid-breakpoints'].lg, 10),
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                }
+            }
+        ]
     };
+
     return (
       <Slider {...settings} className={this.props.className}>
         {movies && movies.map((movie, index) =>
@@ -49,4 +59,4 @@ const Carousel = styled(CarouselUnstyled)`
   }
 `;
 
-export default Carousel
+export default withTheme(Carousel);
