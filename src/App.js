@@ -8,6 +8,7 @@ import {
 import Header from './components/Header';
 import Carousel from './components/Carousel';
 import Loader from './components/Loader';
+import Container from './components/Container';
 
 export default class App extends React.Component {
 
@@ -116,14 +117,14 @@ export default class App extends React.Component {
               <Loader/>
             </div>
             :
-            <React.Fragment>
-              <H2>Featured Movies</H2>
-              <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched}/>
+          <Container>
+            <H2>Featured Movies</H2>
+            <Carousel movies={data && data.entries} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched}/>
 
             < Hr className="my-5" />
             <H2>Previously Watched Movies</H2>
             <Carousel movies={this.getPreviouslyWatchedMovies(data && data.entries)} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />
-          </React.Fragment>
+          </Container>
         }
         </div>
     );

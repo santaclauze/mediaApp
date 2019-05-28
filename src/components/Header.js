@@ -10,6 +10,8 @@ import {
   Tooltip,
 } from '@bootstrap-styled/v4';
 
+import Container from './Container';
+
 export default class Header extends React.Component {
 
   static propTypes = {
@@ -37,23 +39,25 @@ export default class Header extends React.Component {
     const { isLoading } = this.props;
 
     return (
-      <Navbar className="flex-row justify-content-between">
-        <H1>Home</H1>
-        <Button
-            color="success"
-            onClick={this.handleClick}
-            id="tooltip-button"
-        >
-          <FontAwesomeIcon icon="redo" className={cn(isLoading && 'fa-spin')}/>
-        </Button>
-        <Tooltip
-          placement="left"
-          isOpen={isOpen}
-          target="tooltip-button"
-          toggle={this.handleToggle}
-        >
-          Refresh movie list.
-        </Tooltip>
+      <Navbar>
+          <Container className="d-flex flex-row justify-content-between">
+            <H1>Home</H1>
+            <Button
+                color="success"
+                onClick={this.handleClick}
+                id="tooltip-button"
+            >
+              <FontAwesomeIcon icon="redo" className={cn(isLoading && 'fa-spin')}/>
+            </Button>
+            <Tooltip
+              placement="left"
+              isOpen={isOpen}
+              target="tooltip-button"
+              toggle={this.handleToggle}
+            >
+              Refresh movie list.
+            </Tooltip>
+          </Container>
       </Navbar>
     );
   }
