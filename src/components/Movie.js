@@ -2,9 +2,13 @@ import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import cn from 'classnames';
 import {
   Img,
-  P
+  P,
+  Badge,
+  Small,
+  Hr
 } from '@bootstrap-styled/v4';
 
 import MoviePlayer from './MoviePlayer';
@@ -19,19 +23,21 @@ import MoviePlayer from './MoviePlayer';
 // `;
 
 const MovieImg = styled(Img)`
-  position: relative;
+  min-height: 250px;
 `;
 
-export default class Movie extends React.Component {
+class MovieUnstyled extends React.Component {
 
   static propTypes = {
     data: PropTypes.object,
+    className: PropTypes.string,
     updatePreviouslyWatchedList: PropTypes.func,
   };
 
   state = {
     movieOpen : false,
     movieUrl: null,
+    movieHover: false,
   };
 
   componentWillMount() {
@@ -87,12 +93,55 @@ export default class Movie extends React.Component {
     })
   };
 
+  handleOnMouseOver = () => {
+    this.setState({
+      movieHover: true,
+    })
+  }
+
+  handleOnMouseLeave = () => {
+    this.setState({
+      movieHover: false,
+    })
+  }
+
   render() {
-    const { data } = this.props;
+    const { data, className } = this.props;
+    const { movieUrl, movieHover } = this.state;
+    const colorArray = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+
     return (
       <Fragment>
-        <MovieImg src={this.state.movieUrl} onLoad={this.handleLoad(MovieImg)} alt={this.state.movieUrl} className="cursor-pointer" onClick={this.handleOpenVideo} />
-        <P className="text-white">{data.title}</P>
+        <div
+            className={cn(className, 'movie-wrapper cursor-pointer')}
+            onClick={this.handleOpenVideo}
+            onMouseLeave={this.handleOnMouseLeave}
+            onMouseOver={this.handleOnMouseOver}
+        >
+          <MovieImg
+              src={movieUrl}
+              onLoad={this.handleLoad(MovieImg)}
+              alt={movieUrl}
+              className="cursor-pointer"
+          />
+          {movieHover && (
+            <div className="movie-description text-white">
+              <P>{data.title}</P>
+              <Small>{data.description}</Small>
+              <Hr />
+              <Small>Rating: {data.parentalRatings[0].rating}</Small>
+              <Hr />
+              {data.categories.map(category =>
+                <Badge
+                  className="ml-1"
+                >
+                  {category.title}
+                </Badge>
+              )}
+            </div>
+          )}
+          <P className="text-white">{data.title}</P>
+        </div>
         {this.state.movieOpen ? ReactDOM.createPortal(
           <MoviePlayer close={this.handleCloseVideo} movieContent={data.contents[0]} />,
           document.body
@@ -101,3 +150,18 @@ export default class Movie extends React.Component {
     );
   }
 }
+
+const Movie = styled(MovieUnstyled)`
+  &.movie-wrapper {
+    position: relative;
+
+    .movie-description {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+`;
+
+export default Movie;
