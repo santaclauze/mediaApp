@@ -41,10 +41,10 @@ const Carousel = styled(CarouselUnstyled)`
   .slick-arrow {
     z-index: 9998
     &.slick-prev {
-      left: 30px;
+      top: 40%;
     }
     &.slick-next {
-      right: 30px;
+      top: 40%;
     }
   }
 `;
