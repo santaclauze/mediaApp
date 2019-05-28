@@ -16,14 +16,13 @@ class CarouselUnstyled extends React.Component {
     const { movies } = this.props;
 
     const settings = {
-      infinite: true,
+      infinite: false,
       dots: true,
       speed: 500,
       draggable: false,
       slidesToShow: 5,
       slidesToScroll: 1
     };
-
     return (
       <Slider {...settings} className={this.props.className}>
         {movies && movies.map((movie, index) =>

@@ -97,7 +97,6 @@ export default class Movie extends React.Component {
           <MoviePlayer close={this.handleCloseVideo} movieContent={data.contents[0]} />,
           document.body
         ) : null}
-        {/*<MovieSelect/>*/}
       </Fragment>
     );
   }
