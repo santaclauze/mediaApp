@@ -37,48 +37,35 @@ class MovieUnstyled extends React.Component {
 
   state = {
     movieOpen : false,
-    movieUrl: null,
+    movieBase64: null,
     movieHover: false,
   };
 
   componentWillMount() {
+    console.log(this.props)
+    let imageBase64;
     if(localStorage.getItem(this.props.data.id) === null) {
-      this.setState({
-        movieUrl: this.props.data.images[0].url
-      })
+      fetch(`https://cors-anywhere.herokuapp.com/${this.props.data.images[0].url}`)
+        .then(r => r.blob())
+        .then(blob => new Promise((res,rej) => {
+          let fl = new FileReader();
+          fl.onload = e => res(e.target.result);
+          fl.onerror=rej;
+          fl.readAsDataURL(blob)
+        }))
+        .then(result => {
+          imageBase64 = result.replace('data:text/html', 'data:image/jpeg');
+          this.setState({
+            movieBase64: imageBase64,
+          });
+          localStorage.setItem(this.props.data.id, imageBase64)
+        })
     } else {
       this.setState({
-        movieUrl: localStorage.getItem(this.props.data.id)
+        movieBase64: localStorage.getItem(this.props.data.id),
       })
     }
   }
-
-  handleLoad = (image) => {
-    if(localStorage.getItem(this.props.data.id) === null) {
-      const imageBase64 = this.getBase64Image(image);
-      localStorage.setItem(this.props.data.id, imageBase64)
-    }
-  };
-
-  getBase64Image = (img) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    // create new Image to assign image url
-    const image = new Image();
-    image.src = img;
-    image.onload = function() {
-      const canvas = document.createElement("canvas");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
-    };
-
-    const dataURL = canvas.toDataURL("image/jpeg");
-
-    return dataURL;
-  };
-
 
   handleCloseVideo = () => {
     const { updatePreviouslyWatchedList, data } = this.props;
@@ -108,8 +95,7 @@ class MovieUnstyled extends React.Component {
 
   render() {
     const { data, className } = this.props;
-    const { movieUrl, movieHover } = this.state;
-    const colorArray = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+    const { movieBase64, movieHover } = this.state;
 
     return (
       <Fragment>
@@ -120,9 +106,8 @@ class MovieUnstyled extends React.Component {
             onMouseOver={this.handleOnMouseOver}
         >
           <MovieImg
-              src={movieUrl}
-              onLoad={this.handleLoad(MovieImg)}
-              alt={movieUrl}
+              src={movieBase64}
+              alt={data.id}
               className="cursor-pointer movie-image"
           />
           {movieHover && (

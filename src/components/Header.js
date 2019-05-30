@@ -46,6 +46,7 @@ export default class Header extends React.Component {
                 color="success"
                 onClick={this.handleClick}
                 id="tooltip-button"
+                disabled={isLoading}
             >
               <FontAwesomeIcon icon="redo" className={cn(isLoading && 'fa-spin')}/>
             </Button>
