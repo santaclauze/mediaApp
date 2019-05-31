@@ -15,3 +15,8 @@ Example of movie list display.
 
 This is a deployment of the first version of the one page webapp. 
 
+## Scripts
+
+`$ npm install`
+`$ npm run start`
+`$ npm run test`
