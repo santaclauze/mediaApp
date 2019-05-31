@@ -23,6 +23,11 @@ import MoviePlayer from './MoviePlayer';
 //   background-color: red;
 // `;
 
+const MovieWrapper = styled.div`
+  width: 215px;
+  height: 315px;
+`;
+
 const MovieImg = styled(Img)`
   min-height: 250px;
 `;
@@ -99,16 +104,16 @@ class MovieUnstyled extends React.Component {
 
     return (
       <Fragment>
-        <div
-            className={cn(className, 'movie-wrapper cursor-pointer')}
-            onClick={this.handleOpenVideo}
-            onMouseLeave={this.handleOnMouseLeave}
-            onMouseOver={this.handleOnMouseOver}
+        <MovieWrapper
+          className={cn(className, 'movie-wrapper cursor-pointer')}
+          onClick={this.handleOpenVideo}
+          onMouseLeave={this.handleOnMouseLeave}
+          onMouseOver={this.handleOnMouseOver}
         >
           <MovieImg
-              src={movieBase64}
-              alt={data.id}
-              className="cursor-pointer movie-image"
+            src={movieBase64}
+            alt={data.id}
+            className="cursor-pointer movie-image"
           />
           {movieHover && (
             <div className="movie-description text-white">
@@ -128,7 +133,7 @@ class MovieUnstyled extends React.Component {
             </div>
           )}
           <P className="text-white">{data.title}</P>
-        </div>
+        </MovieWrapper>
         {this.state.movieOpen ? ReactDOM.createPortal(
           <MoviePlayer close={this.handleCloseVideo} movieContent={data.contents[0]} />,
           document.body
