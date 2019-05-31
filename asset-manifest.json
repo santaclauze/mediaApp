@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.js": "/mediaApp/static/js/main.439e9e21.chunk.js",
+    "main.js.map": "/mediaApp/static/js/main.439e9e21.chunk.js.map",
+    "runtime~main.js": "/mediaApp/static/js/runtime~main.c7e8b9c5.js",
+    "runtime~main.js.map": "/mediaApp/static/js/runtime~main.c7e8b9c5.js.map",
+    "static/css/2.6d78e86e.chunk.css": "/mediaApp/static/css/2.6d78e86e.chunk.css",
+    "static/js/2.923a003a.chunk.js": "/mediaApp/static/js/2.923a003a.chunk.js",
+    "static/js/2.923a003a.chunk.js.map": "/mediaApp/static/js/2.923a003a.chunk.js.map",
+    "index.html": "/mediaApp/index.html",
+    "precache-manifest.091780277803cc9118188daf7b122fdb.js": "/mediaApp/precache-manifest.091780277803cc9118188daf7b122fdb.js",
+    "service-worker.js": "/mediaApp/service-worker.js",
+    "static/css/2.6d78e86e.chunk.css.map": "/mediaApp/static/css/2.6d78e86e.chunk.css.map",
+    "static/media/slick-theme.scss": "/mediaApp/static/media/slick.f97e3bbf.svg"
+  }
+}
