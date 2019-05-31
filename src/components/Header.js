@@ -7,48 +7,58 @@ import {
   Navbar,
   Button,
   H1,
+  Tooltip,
 } from '@bootstrap-styled/v4';
+
+import Container from './Container';
 
 export default class Header extends React.Component {
 
   static propTypes = {
     onRefreshClick: PropTypes.func,
+    isLoading: PropTypes.bool
   };
 
   state = {
-    mouseOver: false,
+    isOpen: false,
   }
 
   handleClick = () => {
     this.props.onRefreshClick()
   }
 
-  handleMouseOver = () => {
+  handleToggle = () => {
     this.setState({
-      mouseOver: true
+      isOpen: !this.state.isOpen,
     })
   }
 
-  handleMouseOut = () => {
-    this.setState({
-      mouseOver: false
-    })
-  }
 
   render() {
-    const { mouseOver } = this.state;
+    const { isOpen } = this.state;
+    const { isLoading } = this.props;
 
     return (
-      <Navbar className="flex-row justify-content-between">
-        <H1>Home</H1>
-        <Button
-          color="success"
-          onMouseOver={this.handleMouseOver}
-          onMouseOut={this.handleMouseOut}
-          onClick={this.handleClick}
-        >
-          <FontAwesomeIcon icon="redo" className={cn(mouseOver && 'fa-spin')}/>
-        </Button>
+      <Navbar>
+          <Container className="d-flex flex-row justify-content-between">
+            <H1>Home</H1>
+            <Button
+                color="success"
+                onClick={this.handleClick}
+                id="tooltip-button"
+                disabled={isLoading}
+            >
+              <FontAwesomeIcon icon="redo" className={cn(isLoading && 'fa-spin')}/>
+            </Button>
+            <Tooltip
+              placement="left"
+              isOpen={isOpen}
+              target="tooltip-button"
+              toggle={this.handleToggle}
+            >
+              Refresh movie list.
+            </Tooltip>
+          </Container>
       </Navbar>
     );
   }

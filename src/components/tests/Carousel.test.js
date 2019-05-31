@@ -14,6 +14,6 @@ describe('<Carousel />', () => {
             images: [{ url: 'test_url' }]
         }
         const renderedComponent = mount(<Carousel movies={[movie]} />);
-        expect(renderedComponent.find('Movie').length).toBe(2);
+        expect(renderedComponent.find('Movie').length).toBe(1);
     });
 });

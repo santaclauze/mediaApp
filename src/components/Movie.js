@@ -2,10 +2,15 @@ import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import cn from 'classnames';
 import {
   Img,
-  P
+  P,
+  Badge,
+  Small,
+  Hr
 } from '@bootstrap-styled/v4';
+import { mediaBreakpointDown } from '@bootstrap-styled/css-mixins/lib/breakpoints';
 
 import MoviePlayer from './MoviePlayer';
 
@@ -18,60 +23,54 @@ import MoviePlayer from './MoviePlayer';
 //   background-color: red;
 // `;
 
-const MovieImg = styled(Img)`
-  position: relative;
+const MovieWrapper = styled.div`
+  width: 215px;
+  height: 315px;
 `;
 
-export default class Movie extends React.Component {
+const MovieImg = styled(Img)`
+  min-height: 250px;
+`;
+
+class MovieUnstyled extends React.Component {
 
   static propTypes = {
     data: PropTypes.object,
+    className: PropTypes.string,
     updatePreviouslyWatchedList: PropTypes.func,
   };
 
   state = {
     movieOpen : false,
-    movieUrl: null,
+    movieBase64: null,
+    movieHover: false,
   };
 
   componentWillMount() {
+    console.log(this.props)
+    let imageBase64;
     if(localStorage.getItem(this.props.data.id) === null) {
-      this.setState({
-        movieUrl: this.props.data.images[0].url
-      })
+      fetch(`https://cors-anywhere.herokuapp.com/${this.props.data.images[0].url}`)
+        .then(r => r.blob())
+        .then(blob => new Promise((res,rej) => {
+          let fl = new FileReader();
+          fl.onload = e => res(e.target.result);
+          fl.onerror=rej;
+          fl.readAsDataURL(blob)
+        }))
+        .then(result => {
+          imageBase64 = result.replace('data:text/html', 'data:image/jpeg');
+          this.setState({
+            movieBase64: imageBase64,
+          });
+          localStorage.setItem(this.props.data.id, imageBase64)
+        })
     } else {
       this.setState({
-        movieUrl: localStorage.getItem(this.props.data.id)
+        movieBase64: localStorage.getItem(this.props.data.id),
       })
     }
   }
-
-  handleLoad = (image) => {
-    if(localStorage.getItem(this.props.data.id) === null) {
-      const imageBase64 = this.getBase64Image(image);
-      localStorage.setItem(this.props.data.id, imageBase64)
-    }
-  };
-
-  getBase64Image = (img) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    // create new Image to assign image url
-    const image = new Image();
-    image.src = img;
-    image.onload = function() {
-      const canvas = document.createElement("canvas");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
-    };
-
-    const dataURL = canvas.toDataURL("image/jpeg");
-
-    return dataURL;
-  };
-
 
   handleCloseVideo = () => {
     const { updatePreviouslyWatchedList, data } = this.props;
@@ -87,18 +86,80 @@ export default class Movie extends React.Component {
     })
   };
 
+  handleOnMouseOver = () => {
+    this.setState({
+      movieHover: true,
+    })
+  }
+
+  handleOnMouseLeave = () => {
+    this.setState({
+      movieHover: false,
+    })
+  }
+
   render() {
-    const { data } = this.props;
+    const { data, className } = this.props;
+    const { movieBase64, movieHover } = this.state;
+
     return (
       <Fragment>
-        <MovieImg src={this.state.movieUrl} onLoad={this.handleLoad(MovieImg)} alt={this.state.movieUrl} className="cursor-pointer" onClick={this.handleOpenVideo} />
-        <P className="text-white">{data.title}</P>
+        <MovieWrapper
+          className={cn(className, 'movie-wrapper cursor-pointer')}
+          onClick={this.handleOpenVideo}
+          onMouseLeave={this.handleOnMouseLeave}
+          onMouseOver={this.handleOnMouseOver}
+        >
+          <MovieImg
+            src={movieBase64}
+            alt={data.id}
+            className="cursor-pointer movie-image"
+          />
+          {movieHover && (
+            <div className="movie-description text-white">
+              <P>{data.title}</P>
+              <Small>{data.description}</Small>
+              <Hr />
+              <Small>Rating: {data.parentalRatings[0].rating}</Small>
+              <Hr />
+              {data.categories.map((category, index) =>
+                <Badge
+                  className="ml-1"
+                  key={index}
+                >
+                  {category.title}
+                </Badge>
+              )}
+            </div>
+          )}
+          <P className="text-white">{data.title}</P>
+        </MovieWrapper>
         {this.state.movieOpen ? ReactDOM.createPortal(
           <MoviePlayer close={this.handleCloseVideo} movieContent={data.contents[0]} />,
           document.body
         ) : null}
-        {/*<MovieSelect/>*/}
       </Fragment>
     );
   }
 }
+
+const Movie = styled(MovieUnstyled)`
+  ${props => `
+    &.movie-wrapper {
+      position: relative;
+  
+      .movie-description {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+    ${mediaBreakpointDown('sm', props.theme['$grid-breakpoints'], `
+      &.movie-wrapper, .movie-image, .movie-description {
+        max-width: 175px;
+      }
+    `)}
+  `}
+`;
+
+export default Movie;
