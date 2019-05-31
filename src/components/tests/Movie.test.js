@@ -10,6 +10,6 @@ describe('<Movie />', () => {
             images: [{ url: 'test_url' }]
         }
         const renderedComponent = shallow(<Movie data={movie} />);
-        expect(renderedComponent.find('Styled(Img)').length).toBe(1);
+        expect(renderedComponent.find('StyledComponent').length).toBe(1);
     });
 });
