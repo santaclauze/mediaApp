@@ -128,7 +128,7 @@ export default class App extends React.Component {
             <div className="d-sm-none">
               <H2>Featured Movies</H2>
               <div className="d-flex flex-wrap justify-content-around">
-                {data.entries.map(movie => <Movie data={movie} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />)}
+                {data.entries.map((movie, index) => <Movie data={movie} key={index} updatePreviouslyWatchedList={this.handleUpdatePreviouslyWatched} />)}
               </div>
             </div>
           </Container>
