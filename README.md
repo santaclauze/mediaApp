@@ -1,3 +1,5 @@
+![alt text](./docs/video-list.png)
+
 ## Home Cinema
 
 Example of movie list display.
