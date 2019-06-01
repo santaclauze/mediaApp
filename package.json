@@ -16,7 +16,8 @@
     "jsdoc-documentation": "jsdoc-documentation",
     "jsdoc": "jsdoc-documentation --file",
     "prestyleguide": "npm run jsdoc",
-    "styleguide": "styleguidist server"
+    "styleguide": "styleguidist server",
+    "deploy": "aws s3 sync build/ s3://example-movie-list-viewing-app"
   },
   "dependencies": {
     "@babel/core": "7.4.3",
