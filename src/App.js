@@ -48,7 +48,6 @@ export default class App extends React.Component {
   updateFromLocalStorage = () => {
     const locallyStoredPreviouslyWatchedMovies = localStorage.getItem('previouslyWatched');
     if (locallyStoredPreviouslyWatchedMovies !== null && locallyStoredPreviouslyWatchedMovies.split(',').length > 0) {
-      console.log(locallyStoredPreviouslyWatchedMovies.split(','));
       this.setState({
         previouslyWatchedMovieIds: locallyStoredPreviouslyWatchedMovies.split(',')
       })

@@ -47,7 +47,6 @@ class MovieUnstyled extends React.Component {
   };
 
   componentWillMount() {
-    console.log(this.props)
     let imageBase64;
     if(localStorage.getItem(this.props.data.id) === null) {
       fetch(`https://cors-anywhere.herokuapp.com/${this.props.data.images[0].url}`)
