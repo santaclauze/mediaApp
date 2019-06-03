@@ -1,3 +1,4 @@
+Project depreciated in favor of: https://github.com/santaclauze/video-library-player-example
 ![alt text](./docs/video-list.png)
 
 ## Home Cinema
@@ -19,6 +20,12 @@ This is a deployment of the first version of the one page webapp.
 
 ## Scripts
 
+In the repository: 
+
 `$ npm install`
+
 `$ npm run start`
-`$ npm run test`
+
+In the browser:
+
+`localhost:3000`
